@@ -12,6 +12,7 @@ def load_csv(filename):
     return pd.read_csv(filepath)
 
 app = dash.Dash(__name__, suppress_callback_exceptions=True)
+server = app.server 
 
 # -------------------------
 # Define a common Navigation Bar
