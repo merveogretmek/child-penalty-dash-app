@@ -1,5 +1,3 @@
-# 06 App
-
 import os
 import dash
 from dash import html, dcc, Input, Output, State
@@ -205,9 +203,8 @@ def methodology_page():
     ])
 
 # -------------------------
-# Define the Heterogeneous Analysis Page
+# Define the Heterogeneous Analysis Page (Modified with Score Cards)
 # -------------------------
-# Define measure and subgroup labels (exact order as required)
 measure_labels = {
     "ia": "Real Labor Income",
     "wha": "Working Hours (Annual)",
@@ -304,14 +301,19 @@ def heterogeneous_analysis_page():
                     id="heterogeneous-graph",
                     style={"width": "100%", "maxWidth": "800px", "margin": "30px auto"}
                 )
-            ])
+            ]),
+            # New div for score cards
+            html.Div(id="het-score-cards", style={
+                "display": "flex", 
+                "justifyContent": "space-around", 
+                "marginTop": "20px"
+            })
         ], style={"maxWidth": "900px", "margin": "0 auto", "padding": "20px"})
     ])
 
 # -------------------------
 # Define the Reform Analysis Page
 # -------------------------
-# Full dataset from your LaTeX table:
 data_reform = [
     # --- GENERAL (6 rows) ---
     {"Category": "General", "Subcategory": "-", "Approach": "Income Approach",              "Period": "Before 2007", "Total": 42389, "Male": 20453, "Female": 21936, "LR_Child_Penalty": 0.52},
@@ -438,7 +440,7 @@ data_reform = [
     {"Category": "Partnership Status", "Subcategory": "Partnered", "Approach": "Working Hours Approach",     "Period": "Before 2007", "Total": 29816, "Male": 14748, "Female": 15068, "LR_Child_Penalty": 0.55},
     {"Category": "Partnership Status", "Subcategory": "Partnered", "Approach": "Working Hours Approach",     "Period": "After 2007",  "Total": 8953,  "Male": 4163,  "Female": 4790,  "LR_Child_Penalty": 0.43},
     {"Category": "Partnership Status", "Subcategory": "Partnered", "Approach": "Employment Status Approach", "Period": "Before 2007", "Total": 29776, "Male": 14728, "Female": 15048, "LR_Child_Penalty": 0.40},
-    {"Category": "Partnership Status", "Subcategory": "Partnered", "Approach": "Employment Status Approach", "Period": "After 2007",  "Total": 8953,  "Male": 4163,  "Female": 4790,  "LR_Child_Penalty": 0.17},
+    {"Category": "Partnership Status", "Subcategory": "Partnered", "Approach": "Employment Status Approach", "Period": "After 2007",  "Total": 8953,  "Male": 4163, "Female": 4790, "LR_Child_Penalty": 0.17},
     # No-Partner
     {"Category": "Partnership Status", "Subcategory": "No-Partner", "Approach": "Income Approach",            "Period": "Before 2007", "Total": 12265, "Male": 5585,  "Female": 6680,  "LR_Child_Penalty": 0.23},
     {"Category": "Partnership Status", "Subcategory": "No-Partner", "Approach": "Income Approach",            "Period": "After 2007",  "Total": 6361,  "Male": 2613,  "Female": 3748,  "LR_Child_Penalty": 0.14},
@@ -467,7 +469,6 @@ def reform_analysis_page():
                 )
             ], style={"width": "30%", "display": "inline-block", "verticalAlign": "top", "padding": "20px"}),
             html.Div([
-                # Just the graph now, no summary Div
                 dcc.Graph(id="reform-bar-chart")
             ], style={"width": "65%", "display": "inline-block", "paddingLeft": "5%"})
         ], style={"maxWidth": "900px", "margin": "0 auto", "padding": "20px"})
@@ -481,7 +482,6 @@ def build_profile_page():
         navbar(),
         html.H1("Build Your Profile and Predict Long-Run Effect of First Childbirth", 
                 style={"textAlign": "center", "marginTop": "30px"}),
-        # Build Profile Form
         html.Div([
             html.Label("Measurement Type:", className="build-profile-label"),
             dcc.Dropdown(
@@ -575,9 +575,7 @@ def build_profile_page():
             html.Button('Build Profile', id='build-profile-btn', n_clicks=0, className="build-profile-button")
         ], className="build-profile-form"),
         html.Hr(),
-        # Predicted Penalty Output
         html.Div(id='profile-output', className="profile-output"),
-        # Explanation Section for the Predicted Long-Run Child Penalty
         html.Div([
             html.H3("What Does the Predicted Long-Run Effect Mean?"),
             dcc.Markdown('''\
@@ -651,7 +649,6 @@ def update_graph(selected_measure):
         line=dict(color='black'),
         marker=dict(symbol='triangle-up', size=10)
     ))
-    # Add vertical dashed gray line at x = -0.5 (in between event_time -1 and 0)
     fig.add_shape(
         type="line",
         x0=-0.5, x1=-0.5,
@@ -736,7 +733,6 @@ def update_heterogeneous_graph(selected_measure, selected_subgroup):
         line=dict(color='black'),
         marker=dict(symbol='triangle-up', size=10)
     ))
-    # Add vertical dashed gray line at x = -0.5
     fig.add_shape(
         type="line",
         x0=-0.5, x1=-0.5,
@@ -776,6 +772,55 @@ def update_heterogeneous_graph(selected_measure, selected_subgroup):
     return fig
 
 # -------------------------
+# Callback to Update the Heterogeneous Analysis Score Cards
+# -------------------------
+@app.callback(
+    Output("het-score-cards", "children"),
+    [Input("het-measure-dropdown", "value"),
+     Input("het-subgroup-dropdown", "value")]
+)
+def update_het_score_cards(selected_measure, selected_subgroup):
+    file_path = f"results/heterogeneous_analysis/{selected_subgroup}_results_{selected_measure}.csv"
+    try:
+        df = pd.read_csv(file_path)
+    except Exception as e:
+        return html.Div("Data not available.", style={"textAlign": "center"})
+    
+    # Calculate averages
+    avg_m = df["percentage_coef_m"].mean()
+    avg_w = df["percentage_coef_w"].mean()
+    
+    # Calculate long-term child penalty for event_time >= 5
+    df_long_term = df[df["event_time"] >= 5]
+    long_term_penalty = df_long_term["child_penalty"].mean() if not df_long_term.empty else None
+
+    card_style = {
+        "border": "1px solid #ccc",
+        "padding": "10px",
+        "borderRadius": "5px",
+        "width": "30%",
+        "textAlign": "center",
+        "boxShadow": "2px 2px 5px rgba(0,0,0,0.1)"
+    }
+    
+    card_avg_m = html.Div([
+        html.H4("Avg Coefficient for Men"),
+        html.P(f"{avg_m:.2f}")
+    ], style=card_style)
+    
+    card_avg_w = html.Div([
+        html.H4("Avg Coefficient for Women"),
+        html.P(f"{avg_w:.2f}")
+    ], style=card_style)
+    
+    card_long_term = html.Div([
+        html.H4("Long-Term Child Penalty"),
+        html.P(f"{long_term_penalty:.2f}" if long_term_penalty is not None else "N/A")
+    ], style=card_style)
+    
+    return [card_avg_m, card_avg_w, card_long_term]
+
+# -------------------------
 # Callback to Update the Reform Analysis Summary Page
 # -------------------------
 @app.callback(
@@ -783,10 +828,7 @@ def update_heterogeneous_graph(selected_measure, selected_subgroup):
     Input("reform-category-dropdown", "value")
 )
 def update_reform_summary(selected_category):
-    # Filter data for the selected category
     filtered_df = df_reform[df_reform["Category"] == selected_category]
-
-    # Create a grouped bar chart with facets for subcategories
     fig = px.bar(
         filtered_df,
         x="Approach",
@@ -807,14 +849,11 @@ def update_reform_summary(selected_category):
         height=450,
         width=1000
     )
-
-    # (Optional) Adjust axis ranges, etc.
     min_val = filtered_df["LR_Child_Penalty"].min()
     max_val = filtered_df["LR_Child_Penalty"].max()
     padding = 0.05
     fig.update_yaxes(range=[min_val - padding, max_val + padding], matches=None)
     fig.update_xaxes(matches=None)
-
     return fig
 
 # -------------------------
@@ -836,16 +875,12 @@ def build_profile(n_clicks, outcome, gender, area, region, edu, partner, nativit
     if n_clicks == 0:
         return ""
     
-    # For the "gender" subgroup, map the user's input to the proper CSV file name.
-    # There is no "male_results", so if the person is male, we load "malesector_results_{outcome}.csv"
-    # and if the person is female, we load "femalesector_results_{outcome}.csv".
     gender_csv = "malesector" if gender == "male" else "femalesector"
     
     try:
-        # Load CSV files for each subgroup
         area_df     = load_csv(f"{area}_results_{outcome}.csv")
         region_df   = load_csv(f"{region}_results_{outcome}.csv")
-        gender_df   = load_csv(f"{gender_csv}_results_{outcome}.csv")  # Load the gender-specific CSV
+        gender_df   = load_csv(f"{gender_csv}_results_{outcome}.csv")
         edu_df      = load_csv(f"{edu}_results_{outcome}.csv")
         partner_df  = load_csv(f"{partner}_results_{outcome}.csv")
         nativity_df = load_csv(f"{nativity}_results_{outcome}.csv")
@@ -853,11 +888,7 @@ def build_profile(n_clicks, outcome, gender, area, region, edu, partner, nativit
     except Exception as e:
         return html.Div(f"Error loading one or more CSV files: {str(e)}")
     
-    # Function to calculate the long-run penalty for a given subgroup CSV.
-    # If the person is male, use the column 'percentage_coef_m'.
-    # If the person is female, use the column 'child_penalty' (which is relative to men).
     def calculate_long_run_penalty(df, is_male):
-        # Filter for event_time 5 and after
         df_long_run = df[df['event_time'] >= 5]
         if df_long_run.empty:
             return None
@@ -866,10 +897,8 @@ def build_profile(n_clicks, outcome, gender, area, region, edu, partner, nativit
         else:
             return abs(df_long_run['percentage_coef_w'].mean())
     
-    # Determine flag for calculation based on person's gender.
     is_male = (gender == "male")
     
-    # Calculate long-run penalty for each subgroup
     area_penalty     = calculate_long_run_penalty(area_df, is_male)
     region_penalty   = calculate_long_run_penalty(region_df, is_male)
     gender_penalty   = calculate_long_run_penalty(gender_df, is_male)
@@ -878,16 +907,11 @@ def build_profile(n_clicks, outcome, gender, area, region, edu, partner, nativit
     nativity_penalty = calculate_long_run_penalty(nativity_df, is_male)
     age_penalty      = calculate_long_run_penalty(age_df, is_male)
     
-    # Aggregate the subgroup penalties by taking their average.
     penalties = [area_penalty, region_penalty, gender_penalty,
                  edu_penalty, partner_penalty, nativity_penalty, age_penalty]
     valid_penalties = [p for p in penalties if p is not None]
-    if not valid_penalties:
-        overall_penalty = None
-    else:
-        overall_penalty = sum(valid_penalties) / len(valid_penalties)
+    overall_penalty = sum(valid_penalties) / len(valid_penalties) if valid_penalties else None
     
-    # Present the predicted long-run child penalty
     result = html.Div([
         html.H3("Predicted Long-Run Child Penalty"),
         html.P(
@@ -901,4 +925,3 @@ def build_profile(n_clicks, outcome, gender, area, region, edu, partner, nativit
 
 if __name__ == '__main__':
     app.run_server(debug=True)
-
