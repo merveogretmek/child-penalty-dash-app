@@ -17,20 +17,21 @@ server = app.server
 # -------------------------
 def navbar():
     return html.Nav([
-        html.A("Introduction", href="/", style={"margin": "0 15px", "color": "white", "textDecoration": "none"}),
-        html.A("Methodology", href="/methodology", style={"margin": "0 15px", "color": "white", "textDecoration": "none"}),
-        html.A("Heterogeneous Analysis", href="/heterogeneous", style={"margin": "0 15px", "color": "white", "textDecoration": "none"}),
-        html.A("Reform Analysis", href="/reform", style={"margin": "0 15px", "color": "white", "textDecoration": "none"}),
-        html.A("Build Your Profile", href="/profile", style={"margin": "0 15px", "color": "white", "textDecoration": "none"})
+        html.A("Introduction", href="/", style={"margin": "0 20px", "color": "white", "textDecoration": "none", "fontSize": "20px"}),
+        html.A("Overview", href="/overview", style={"margin": "0 20px", "color": "white", "textDecoration": "none", "fontSize": "20px"}),
+        html.A("Methodology", href="/methodology", style={"margin": "0 20px", "color": "white", "textDecoration": "none", "fontSize": "20px"}),
+        html.A("Heterogeneous Analysis", href="/heterogeneous", style={"margin": "0 20px", "color": "white", "textDecoration": "none", "fontSize": "20px"}),
+        html.A("Reform Analysis", href="/reform", style={"margin": "0 20px", "color": "white", "textDecoration": "none", "fontSize": "20px"}),
+        html.A("Build Your Profile", href="/profile", style={"margin": "0 20px", "color": "white", "textDecoration": "none", "fontSize": "20px"})
     ], style={
         "backgroundColor": "#333",
-        "padding": "10px",
+        "padding": "20px",
         "display": "flex",
         "justifyContent": "center"
     })
 
 # -------------------------
-# Define the Index Page (Landing + Graph Section)
+# Define the Index Page (Landing only)
 # -------------------------
 def index_page():
     return html.Div([
@@ -43,40 +44,108 @@ def index_page():
                 html.Div(
                     className="content",
                     children=[
-                        html.H1("Child Penalty Explorer: Insights from Germany", className="main-heading"),
-                        html.H3("Analyzing how parenthood affects wages, working hours, and employment opportunities", className="sub-heading"),
+                        # Title Container
                         html.Div(
-                            html.A("Explore Now", href="#second-part", className="explore-button"),
-                            className="button-container"
+                            style={
+                                "background": "linear-gradient(to bottom right, #474E93, #474E93)",
+                                "padding": "25px",
+                                "borderRadius": "10px",
+                                "maxWidth": "1200px",
+                                "margin": "0 auto",
+                                "textAlign": "center",
+                                "color": "white",
+                                "boxShadow": "0 4px 6px rgba(0,0,0,0.1)",
+                                "opacity": "0.80",
+                                "fontSize": "18px"
+                            },
+                            children=[
+                                html.H1("Child Penalty Explorer: Insights from Germany", className="main-heading"),
+                                html.H3("Analyzing how parenthood affects wages, working hours, and employment opportunities", className="sub-heading"),
+                            ]
                         ),
-                        html.Div("Created by Merve Ogretmek", className="footer")
+                        html.Div(
+                            html.A("Explore Now", href="/overview", className="explore-button"),
+                            className="button-container",
+                            style={"marginTop": "20px"}
+                        ),
+                        html.Div("Created by Merve Ogretmek", className="footer", style={"marginTop": "20px", "color": "white", "fontSize": "18px"})
                     ]
                 )
             ]
-        ),
-        # Second Section: Graph & Dropdown (with its own solid background)
+        )
+    ])
+
+# -------------------------
+# Define the Overview Page (Big Picture in Germany)
+# -------------------------
+def overview_page():
+    return html.Div([
+        navbar(),
+        # A wrapping DIV to increase font size and width
         html.Div(
-            id="second-part",
-            style={"backgroundColor": "#f0f0f0", "paddingBottom": "50px"},
+            id="overview-section",
+            style={"backgroundColor": "#FFFFFF", "paddingBottom": "50px", "width": "90%", "margin": "0 auto", "fontSize": "18px"},
             children=[
-                # Navigation Bar
-                navbar(),
                 html.Div(
                     children=[
-                        html.P(
-                            "The “child penalty” refers to the long-term impact on mother’s wages, hours, career trajectories after having a child, "
-                            "relative to fathers. This phenomenon not only carries significant economic implications but also highlights persistent gender "
-                            "inequalities in the labor market, emphasizing its relevance for shaping effective public policy."
-                        ),
-                        html.P(
-                            "The analysis draws on data from the German Socio-Economic Panel (SOEP) covering the years 1984–2020 and employs an event-study approach "
-                            "to trace these labor market dynamics over time. For more details on our methodology, please visit the dedicated “Methodology” page."
-                        ),
-                        html.H2("Big Picture in Germany", style={"textAlign": "center", "marginTop": "40px"}),
+                        html.H2("Big Picture in Germany", style={"textAlign": "center", "marginTop": "40px", "fontSize": "32px"}),
+
+                        # --------------- NEW BULLET POINTS SECTION ---------------
+                        html.Div([
+                            html.H3("Key Takeaways", style={"marginTop": "20px", "fontSize": "26px"}),
+                            html.Ul([
+                                html.Li(
+                                    "The “child penalty” in Germany refers to the significant decline in women’s earnings after motherhood, "
+                                    "compared to men’s relatively stable earnings once they become fathers.",
+                                    style={"marginBottom": "10px"}
+                                ),
+                                html.Li(
+                                    "This penalty has profound implications for gender equality, influencing how women navigate both "
+                                    "career development and family responsibilities.",
+                                    style={"marginBottom": "10px"}
+                                ),
+                            ]),
+                            html.H3("Context", style={"marginTop": "20px", "fontSize": "26px"}),
+                            html.Ul([
+                                html.Li(
+                                    "The child penalty matters for gender equality because it perpetuates wage gaps, slows career growth, "
+                                    "and can deter women from fully re-entering the workforce.",
+                                    style={"marginBottom": "10px"}
+                                ),
+                                html.Li(
+                                    "In Germany, traditional gender norms, lack of full-time childcare options, and policy structures contribute "
+                                    "to the persistence of this penalty.",
+                                    style={"marginBottom": "10px"}
+                                ),
+                                html.Li(
+                                    "These factors collectively shape women’s long-term labor market trajectories, often reinforcing a cycle "
+                                    "of reduced work hours, slower promotions, and lower earnings over their careers.",
+                                    style={"marginBottom": "10px"}
+                                )
+                            ]),
+                            html.H3("Main Findings", style={"marginTop": "20px", "fontSize": "26px"}),
+                            html.Ul([
+                                html.Li([
+                                    html.Strong("Earnings Drop: "),
+                                    "Women experience an earnings drop of around 54% following the birth of their first child, "
+                                    "while men’s earnings remain relatively unaffected."
+                                ], style={"marginBottom": "10px"}),
+                                html.Li([
+                                    html.Strong("Duration: "),
+                                    "This penalty can persist for 10 years or more, indicating long-term career impacts for mothers."
+                                ], style={"marginBottom": "10px"}),
+                                html.Li([
+                                    html.Strong("Reduced Hours & Career Progression: "),
+                                    "Many mothers reduce working hours or shift to less demanding roles, directly affecting their earnings potential."
+                                ], style={"marginBottom": "10px"})
+                            ])
+                        ], style={"maxWidth": "1200px", "margin": "20px auto", "color": "#333"}),
+                        # --------------- END NEW BULLET POINTS ---------------
+
                         html.Div([
                             dcc.Graph(
                                 id="child-penalty-graph", 
-                                style={"width": "100%", "maxWidth": "800px", "margin": "0 auto"}
+                                style={"width": "100%", "maxWidth": "900px", "margin": "0 auto"}
                             ),
                             dcc.Dropdown(
                                 id="measure-dropdown",
@@ -95,7 +164,7 @@ def index_page():
                             style={"marginTop": "30px", "textAlign": "center"}
                         )
                     ],
-                    style={"padding": "50px", "maxWidth": "900px", "margin": "0 auto"}
+                    style={"padding": "40px", "maxWidth": "1200px", "margin": "0 auto"}
                 )
             ]
         )
@@ -121,7 +190,7 @@ def methodology_page():
                     "color": "#444", 
                     "borderBottom": "2px solid #007BFF", 
                     "paddingBottom": "10px",
-                    "marginTop": "30px"
+                    "marginTop": "30px", "fontSize": "26px"
                 }),
                 html.Ul([
                     html.Li("How does having a child change women’s earnings and job participation?", style={"margin": "10px 0"}),
@@ -130,7 +199,7 @@ def methodology_page():
                 ], style={
                     "paddingLeft": "20px", 
                     "lineHeight": "1.6", 
-                    "fontSize": "16px", 
+                    "fontSize": "18px", 
                     "color": "#555"
                 })
             ]),
@@ -140,7 +209,7 @@ def methodology_page():
                     "color": "#444", 
                     "borderBottom": "2px solid #007BFF", 
                     "paddingBottom": "10px",
-                    "marginTop": "30px"
+                    "marginTop": "30px", "fontSize": "26px"
                 }),
                 html.Ul([
                     html.Li("Individuals aged 20-45 at first childbirth", style={"margin": "10px 0"}),
@@ -150,7 +219,7 @@ def methodology_page():
                 ], style={
                     "paddingLeft": "20px", 
                     "lineHeight": "1.6", 
-                    "fontSize": "16px", 
+                    "fontSize": "18px", 
                     "color": "#555"
                 })
             ]),
@@ -160,23 +229,23 @@ def methodology_page():
                     "color": "#444", 
                     "borderBottom": "2px solid #007BFF", 
                     "paddingBottom": "10px",
-                    "marginTop": "30px"
+                    "marginTop": "30px", "fontSize": "26px"
                 }),
                 html.Div([
                     html.P([html.B("Core Idea:"), 
                             " Compare women’s career trajectories around the time of first childbirth to a “no-birth” baseline, controlling for age and year."],
-                           style={"fontSize": "16px", "color": "#555", "margin": "10px 0"}),
-                    html.P(html.B("Timeline:"), style={"fontSize": "16px", "color": "#555", "margin": "10px 0"}),
+                           style={"fontSize": "18px", "color": "#555", "margin": "10px 0"}),
+                    html.P(html.B("Timeline:"), style={"fontSize": "18px", "color": "#555", "margin": "10px 0"}),
                     html.Ul([
                         html.Li("Define year of birth as Event Time 0", style={"margin": "8px 0"}),
                         html.Li("Negative years (-1, -2, ...) refer to pre-birth, positives (+1, +2, ...) to post-birth", style={"margin": "8px 0"})
                     ], style={
                         "paddingLeft": "20px", 
                         "lineHeight": "1.6", 
-                        "fontSize": "16px", 
+                        "fontSize": "18px", 
                         "color": "#555"
                     }),
-                    html.P(html.B("What We Estimate:"), style={"fontSize": "16px", "color": "#555", "margin": "10px 0"}),
+                    html.P(html.B("What We Estimate:"), style={"fontSize": "18px", "color": "#555", "margin": "10px 0"}),
                     html.Ul([
                         html.Li("Mothers: How income/hours/employment deviate from their own pre-birth levels", style={"margin": "8px 0"}),
                         html.Li("Fathers: Provide a benchmark, to see how men’s outcomes evolve around fatherhood", style={"margin": "8px 0"}),
@@ -184,16 +253,15 @@ def methodology_page():
                     ], style={
                         "paddingLeft": "20px", 
                         "lineHeight": "1.6", 
-                        "fontSize": "16px", 
+                        "fontSize": "18px", 
                         "color": "#555"
                     })
                 ])
             ])
-        ], style={"maxWidth": "900px", "margin": "0 auto", "padding": "20px"}),
-        # Footnote Section at the bottom
+        ], style={"maxWidth": "1200px", "margin": "0 auto", "padding": "20px"}),
         html.Div([
             html.P("1. These criteria are adopted from Kleven et al. (2019)", style={
-                "fontSize": "14px", 
+                "fontSize": "16px", 
                 "fontStyle": "italic", 
                 "color": "#777",
                 "textAlign": "center",
@@ -277,38 +345,37 @@ def heterogeneous_analysis_page():
                 "fontSize": "36px"
             }),
             html.Div([
-                html.Label("Select Measure:", style={"fontWeight": "bold", "marginRight": "10px"}),
+                html.Label("Select Measure:", style={"fontWeight": "bold", "marginRight": "10px", "fontSize": "18px"}),
                 dcc.Dropdown(
                     id="het-measure-dropdown",
                     options=measure_options,
                     value="ia",
                     clearable=False,
-                    style={"width": "300px", "display": "inline-block"}
+                    style={"width": "300px", "display": "inline-block", "fontSize": "18px"}
                 )
             ], style={"textAlign": "center", "marginTop": "20px"}),
             html.Div([
-                html.Label("Select Subgroup:", style={"fontWeight": "bold", "marginRight": "10px"}),
+                html.Label("Select Subgroup:", style={"fontWeight": "bold", "marginRight": "10px", "fontSize": "18px"}),
                 dcc.Dropdown(
                     id="het-subgroup-dropdown",
                     options=subgroup_options,
                     value="rural",
                     clearable=False,
-                    style={"width": "300px", "display": "inline-block"}
+                    style={"width": "300px", "display": "inline-block", "fontSize": "18px"}
                 )
             ], style={"textAlign": "center", "marginTop": "20px"}),
             html.Div([
                 dcc.Graph(
                     id="heterogeneous-graph",
-                    style={"width": "100%", "maxWidth": "800px", "margin": "30px auto"}
+                    style={"width": "100%", "maxWidth": "900px", "margin": "30px auto"}
                 )
             ]),
-            # New div for score cards
             html.Div(id="het-score-cards", style={
                 "display": "flex", 
                 "justifyContent": "space-around", 
                 "marginTop": "20px"
             })
-        ], style={"maxWidth": "900px", "margin": "0 auto", "padding": "20px"})
+        ], style={"maxWidth": "1200px", "margin": "0 auto", "padding": "20px", "fontSize": "18px"})
     ])
 
 # -------------------------
@@ -440,7 +507,7 @@ data_reform = [
     {"Category": "Partnership Status", "Subcategory": "Partnered", "Approach": "Working Hours Approach",     "Period": "Before 2007", "Total": 29816, "Male": 14748, "Female": 15068, "LR_Child_Penalty": 0.55},
     {"Category": "Partnership Status", "Subcategory": "Partnered", "Approach": "Working Hours Approach",     "Period": "After 2007",  "Total": 8953,  "Male": 4163,  "Female": 4790,  "LR_Child_Penalty": 0.43},
     {"Category": "Partnership Status", "Subcategory": "Partnered", "Approach": "Employment Status Approach", "Period": "Before 2007", "Total": 29776, "Male": 14728, "Female": 15048, "LR_Child_Penalty": 0.40},
-    {"Category": "Partnership Status", "Subcategory": "Partnered", "Approach": "Employment Status Approach", "Period": "After 2007",  "Total": 8953,  "Male": 4163, "Female": 4790, "LR_Child_Penalty": 0.17},
+    {"Category": "Partnership Status", "Subcategory": "Partnered", "Approach": "Employment Status Approach", "Period": "After 2007",  "Total": 8953,  "Male": 4163,  "Female": 4790,  "LR_Child_Penalty": 0.17},
     # No-Partner
     {"Category": "Partnership Status", "Subcategory": "No-Partner", "Approach": "Income Approach",            "Period": "Before 2007", "Total": 12265, "Male": 5585,  "Female": 6680,  "LR_Child_Penalty": 0.23},
     {"Category": "Partnership Status", "Subcategory": "No-Partner", "Approach": "Income Approach",            "Period": "After 2007",  "Total": 6361,  "Male": 2613,  "Female": 3748,  "LR_Child_Penalty": 0.14},
@@ -457,21 +524,21 @@ def reform_analysis_page():
         navbar(),
         html.Div([
             html.H1("Reform Analysis: Long-Run Child Penalty Summary", 
-                    style={"textAlign": "center", "marginTop": "30px", "color": "#333"}),
+                    style={"textAlign": "center", "marginTop": "30px", "color": "#333", "fontSize": "32px"}),
             html.Div([
-                html.Label("Select Category:", style={"fontWeight": "bold", "marginRight": "10px"}),
+                html.Label("Select Category:", style={"fontWeight": "bold", "marginRight": "10px", "fontSize": "18px"}),
                 dcc.Dropdown(
                     id="reform-category-dropdown",
                     options=[{"label": cat, "value": cat} for cat in df_reform["Category"].unique()],
                     value="General",
                     clearable=False,
-                    style={"width": "300px"}
+                    style={"width": "300px", "fontSize": "18px"}
                 )
             ], style={"width": "30%", "display": "inline-block", "verticalAlign": "top", "padding": "20px"}),
             html.Div([
                 dcc.Graph(id="reform-bar-chart")
             ], style={"width": "65%", "display": "inline-block", "paddingLeft": "5%"})
-        ], style={"maxWidth": "900px", "margin": "0 auto", "padding": "20px"})
+        ], style={"maxWidth": "1200px", "margin": "0 auto", "padding": "20px", "fontSize": "18px"})
     ])
 
 # -------------------------
@@ -481,9 +548,9 @@ def build_profile_page():
     return html.Div([
         navbar(),
         html.H1("Build Your Profile and Predict Long-Run Effect of First Childbirth", 
-                style={"textAlign": "center", "marginTop": "30px"}),
+                style={"textAlign": "center", "marginTop": "30px", "fontSize": "32px"}),
         html.Div([
-            html.Label("Measurement Type:", className="build-profile-label"),
+            html.Label("Measurement Type:", className="build-profile-label", style={"fontSize": "18px"}),
             dcc.Dropdown(
                 id='outcome-type',
                 options=[
@@ -492,9 +559,10 @@ def build_profile_page():
                     {'label': 'Employment Status', 'value': 'esa'},
                 ],
                 value='ia',
-                className="build-profile-dropdown"
+                className="build-profile-dropdown",
+                style={"fontSize": "18px", "width": "300px"}
             ),
-            html.Label("Gender:", className="build-profile-label"),
+            html.Label("Gender:", className="build-profile-label", style={"fontSize": "18px", "marginTop": "10px"}),
             dcc.RadioItems(
                 id='gender',
                 options=[
@@ -503,9 +571,10 @@ def build_profile_page():
                 ],
                 value='male',
                 labelStyle={'display': 'inline-block', 'margin-right': '20px'},
-                className="build-profile-radio"
+                className="build-profile-radio",
+                style={"fontSize": "18px"}
             ),
-            html.Label("Residential Area:", className="build-profile-label"),
+            html.Label("Residential Area:", className="build-profile-label", style={"fontSize": "18px", "marginTop": "10px"}),
             dcc.RadioItems(
                 id='area-type',
                 options=[
@@ -514,9 +583,10 @@ def build_profile_page():
                 ],
                 value='rural',
                 labelStyle={'display': 'inline-block', 'margin-right': '20px'},
-                className="build-profile-radio"
+                className="build-profile-radio",
+                style={"fontSize": "18px"}
             ),
-            html.Label("Region:", className="build-profile-label"),
+            html.Label("Region:", className="build-profile-label", style={"fontSize": "18px", "marginTop": "10px"}),
             dcc.RadioItems(
                 id='region-type',
                 options=[
@@ -525,9 +595,10 @@ def build_profile_page():
                 ],
                 value='west',
                 labelStyle={'display': 'inline-block', 'margin-right': '20px'},
-                className="build-profile-radio"
+                className="build-profile-radio",
+                style={"fontSize": "18px"}
             ),
-            html.Label("Education Level:", className="build-profile-label"),
+            html.Label("Education Level:", className="build-profile-label", style={"fontSize": "18px", "marginTop": "10px"}),
             dcc.RadioItems(
                 id='edu-type',
                 options=[
@@ -536,9 +607,10 @@ def build_profile_page():
                 ],
                 value='lowedu',
                 labelStyle={'display': 'inline-block', 'margin-right': '20px'},
-                className="build-profile-radio"
+                className="build-profile-radio",
+                style={"fontSize": "18px"}
             ),
-            html.Label("Partner Status:", className="build-profile-label"),
+            html.Label("Partner Status:", className="build-profile-label", style={"fontSize": "18px", "marginTop": "10px"}),
             dcc.RadioItems(
                 id='partner-status',
                 options=[
@@ -547,9 +619,10 @@ def build_profile_page():
                 ],
                 value='nopartner',
                 labelStyle={'display': 'inline-block', 'margin-right': '20px'},
-                className="build-profile-radio"
+                className="build-profile-radio",
+                style={"fontSize": "18px"}
             ),
-            html.Label("Origin:", className="build-profile-label"),
+            html.Label("Origin:", className="build-profile-label", style={"fontSize": "18px", "marginTop": "10px"}),
             dcc.RadioItems(
                 id='nativity-type',
                 options=[
@@ -558,9 +631,10 @@ def build_profile_page():
                 ],
                 value='native',
                 labelStyle={'display': 'inline-block', 'margin-right': '20px'},
-                className="build-profile-radio"
+                className="build-profile-radio",
+                style={"fontSize": "18px"}
             ),
-            html.Label("Age at First Parenthood:", className="build-profile-label"),
+            html.Label("Age at First Parenthood:", className="build-profile-label", style={"fontSize": "18px", "marginTop": "10px"}),
             dcc.RadioItems(
                 id='age-group',
                 options=[
@@ -570,18 +644,19 @@ def build_profile_page():
                 ],
                 value='median',
                 labelStyle={'display': 'inline-block', 'margin-right': '20px'},
-                className="build-profile-radio"
+                className="build-profile-radio",
+                style={"fontSize": "18px"}
             ),
-            html.Button('Build Profile', id='build-profile-btn', n_clicks=0, className="build-profile-button")
-        ], className="build-profile-form"),
+            html.Button('Build Profile', id='build-profile-btn', n_clicks=0, className="build-profile-button", style={"fontSize": "18px", "marginTop": "20px"})
+        ], className="build-profile-form", style={"maxWidth": "1200px", "margin": "0 auto", "fontSize": "18px"}),
         html.Hr(),
-        html.Div(id='profile-output', className="profile-output"),
+        html.Div(id='profile-output', className="profile-output", style={"fontSize": "18px", "marginLeft": "20px"}),
         html.Div([
-            html.H3("What Does the Predicted Long-Run Effect Mean?"),
+            html.H3("What Does the Predicted Long-Run Effect Mean?", style={"fontSize": "26px"}),
             dcc.Markdown('''\
 The predicted long-run effect represents the estimated long-term impact that becoming a parent has on your labor market outcomes. In practical terms, it shows by what percentage your expected outcomes—such as earnings, working hours, or employment status—might be lower compared to a scenario where you did not have a child. For instance, if the penalty is **0.30**, it suggests that your outcomes could be 30% lower in the long run due to childbearing. This number summarizes the cumulative effect of parenthood on your career trajectory.
-            ''')
-        ], style={"maxWidth": "900px", "margin": "0 auto", "padding": "20px"})
+            ''', style={"fontSize": "18px"})
+        ], style={"maxWidth": "1200px", "margin": "0 auto", "padding": "20px"})
     ])
 
 # -------------------------
@@ -598,7 +673,9 @@ app.layout = html.Div([
 @app.callback(Output("page-content", "children"),
               [Input("url", "pathname")])
 def display_page(pathname):
-    if pathname == "/methodology":
+    if pathname == "/overview":
+        return overview_page()
+    elif pathname == "/methodology":
         return methodology_page()
     elif pathname == "/heterogeneous":
         return heterogeneous_analysis_page()
@@ -607,10 +684,11 @@ def display_page(pathname):
     elif pathname == "/profile":
         return build_profile_page()
     else:
+        # Default for "/", or unknown paths
         return index_page()
 
 # -------------------------
-# Callback to Update the Graph on the Index Page
+# Callback to Update the Graph on the Overview Page
 # -------------------------
 @app.callback(
     Output("child-penalty-graph", "figure"),
@@ -625,13 +703,15 @@ def update_graph(selected_measure):
     file_name = file_map.get(selected_measure, "results/general_results_ia.csv")
     try:
         df = pd.read_csv(file_name)
-    except Exception as e:
+    except Exception:
         fig = go.Figure()
         fig.update_layout(title="Data not available. Please check your CSV files.")
         return fig
+
     mean_m = df.loc[df['event_time'] >= 0, 'percentage_coef_m'].mean() - df.loc[df['event_time'] < 0, 'percentage_coef_m'].mean()
     mean_w = df.loc[df['event_time'] >= 0, 'percentage_coef_w'].mean() - df.loc[df['event_time'] < 0, 'percentage_coef_w'].mean()
     child_penalty = mean_m - mean_w
+
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=df['event_time'],
@@ -662,7 +742,7 @@ def update_graph(selected_measure):
         xref="paper", yref="paper",
         x=0.02, y=0.98,
         showarrow=False,
-        font=dict(size=10, color="black")
+        font=dict(size=12, color="black")
     )
     fig.update_layout(
         height=350,
@@ -707,7 +787,7 @@ def update_heterogeneous_graph(selected_measure, selected_subgroup):
     file_path = f"results/heterogeneous_analysis/{selected_subgroup}_results_{selected_measure}.csv"
     try:
         df = pd.read_csv(file_path)
-    except Exception as e:
+    except Exception:
         fig = go.Figure()
         fig.update_layout(
             title="Data not available. Please check your CSV files.",
@@ -716,6 +796,7 @@ def update_heterogeneous_graph(selected_measure, selected_subgroup):
             paper_bgcolor="white"
         )
         return fig
+
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=df['event_time'],
@@ -783,7 +864,7 @@ def update_het_score_cards(selected_measure, selected_subgroup):
     file_path = f"results/heterogeneous_analysis/{selected_subgroup}_results_{selected_measure}.csv"
     try:
         df = pd.read_csv(file_path)
-    except Exception as e:
+    except Exception:
         return html.Div("Data not available.", style={"textAlign": "center"})
     
     # Calculate averages
@@ -800,21 +881,22 @@ def update_het_score_cards(selected_measure, selected_subgroup):
         "borderRadius": "5px",
         "width": "30%",
         "textAlign": "center",
-        "boxShadow": "2px 2px 5px rgba(0,0,0,0.1)"
+        "boxShadow": "2px 2px 5px rgba(0,0,0,0.1)",
+        "fontSize": "18px"
     }
     
     card_avg_m = html.Div([
-        html.H4("Avg Coefficient for Men"),
+        html.H4("Avg Coefficient for Men", style={"fontSize": "20px", "marginBottom": "5px"}),
         html.P(f"{avg_m:.2f}")
     ], style=card_style)
     
     card_avg_w = html.Div([
-        html.H4("Avg Coefficient for Women"),
+        html.H4("Avg Coefficient for Women", style={"fontSize": "20px", "marginBottom": "5px"}),
         html.P(f"{avg_w:.2f}")
     ], style=card_style)
     
     card_long_term = html.Div([
-        html.H4("Long-Term Child Penalty"),
+        html.H4("Long-Term Child Penalty", style={"fontSize": "20px", "marginBottom": "5px"}),
         html.P(f"{long_term_penalty:.2f}" if long_term_penalty is not None else "N/A")
     ], style=card_style)
     
@@ -913,13 +995,14 @@ def build_profile(n_clicks, outcome, gender, area, region, edu, partner, nativit
     overall_penalty = sum(valid_penalties) / len(valid_penalties) if valid_penalties else None
     
     result = html.Div([
-        html.H3("Predicted Long-Run Child Penalty"),
+        html.H3("Predicted Long-Run Child Penalty", style={"fontSize": "24px"}),
         html.P(
             f"Overall predicted penalty: {overall_penalty:.2f}" 
             if overall_penalty is not None 
-            else "No data available for event_time 5 and after."
+            else "No data available for event_time 5 and after.",
+            style={"fontSize": "18px"}
         )
-    ])
+    ], style={"marginTop": "20px"})
     
     return result
 
