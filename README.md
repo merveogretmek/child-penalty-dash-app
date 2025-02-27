@@ -61,8 +61,50 @@ In many countries, women’s earnings and employment trajectories diverge sharpl
 - `requirements.txt`
   - Lists the Python dependencies needed to run this Dash app.
     
+## Getting Started
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/<merveogretmek>/<child-penalty-dash-app>.git
+cd <child-penalty-dash-app>
+```
+
+### 2. Create and Activate a Virtual Environment
+
+```bash
+python -m venv venv
+source venv/bin/activate     # On macOS/Linux
+venv\Scripts\activate        # On Windows
+```
+
+### 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Run the Application Locally
+
+```bash
+python app.py
+```
+
+By default, the Dash server should start on `http://127.0.0.1:8050/`. Visit that URL in your browser to explore the app.
+
+## Usage
+
+Once the app is running, you can navigate through the different pages via the top navigation bar:
+
+1. **Introduction-** Landing page with a brief overview of the Child Penalty concept.
+2. **Overview-** Presents the big-picture child penalty results for Germany.
+3. **Methodology-** Discusses the event-study design, sample criteria, and research aims.
+4. **Heterogeneous Analysis-** Lets you explore subgroups (e.g., rural vs. urban, different education levels) to see how child penalties vary.
+5. **Reform Analysis-** Highlights how the 2007 Parental Leave Reform might have influenced long-run child penalties, visualized by bar charts.
+6. **Build your Profile-** Allows you to select demographic characteristics, returning an estimated penalty for your chosen profile.
 
 
+If you find this tool helpful or would like to suggest improvements, feel free to open an issue or submit a pull request!
 
 
 
